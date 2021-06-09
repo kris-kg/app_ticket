@@ -13,8 +13,7 @@ load_dotenv(BASE_DIR / ".env")
 user_smtp = os.environ.get("USER_SMTP")
 pass_smtp = os.environ.get("PASSWORD_SMTP")
 host_src_smtp = os.environ.get("FROM_HOST_SMTP")
-emails = ["krzysztof.gul@orange.com"] 
-
+emails = ["*@orange.com"] 
 
 class Sender():
     subject = ""
