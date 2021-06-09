@@ -20,7 +20,7 @@ BASE_DIR=Path(__file__).resolve().parent
 LOG_DIR = (BASE_DIR / "log")
 os.makedirs(LOG_DIR, exist_ok=True)
 
-EMAIL_RECIPIENTS = ["krzysztof.gul@orange.com", "kgul.pl@gmail.com", "GNOCe_BO_TN@orange.com", "GNOCe_FO_TN@orange.com" ] 
+EMAIL_RECIPIENTS = [ "**@orange.com", "**@orange.com" ] 
 
 load_dotenv()
 db = os.environ.get("DATABASE")
