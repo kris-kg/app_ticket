@@ -65,10 +65,9 @@ if osc_alarm_obj and mut_alarm_obj:
         print(f"After removing duplicate sections: {len(obj_lst_to_render)}")
         logging.info(f"After removing duplicate sections: {len(obj_lst_to_render)}")
         obj_lst_to_render = [obj for obj in obj_lst_to_render if not check_is_reported(obj)]  
-        obj_lst_to_render2 = [obj for obj in obj_lst_to_render if not check_is_reported_by_alm_id(obj)]  
+        obj_lst_to_render = [obj for obj in obj_lst_to_render if not check_is_reported_by_alm_id(obj)]  
         print(f"After removing reported alarms, to the report: {len(obj_lst_to_render)}")
         logging.info(f"After removing reported alarms, to the report: {len(obj_lst_to_render)}")
-        logging.info(f"After removing reported alarms(check alarm deatil), to the report: {len(obj_lst_to_render2)}")
     else:
         obj_lst_to_render = None
 else:
@@ -84,8 +83,9 @@ if obj_lst_to_render:
 
 for i in list_msg:
     Sender( subject="OSP: OSC LOS alarm", template_file= "email_osc.txt", template_file_html = "email_osc.html", context = i,  to_emails = EMAIL_RECIPIENTS).send()
-#     # msg = Sender( subject="Test OSC LOS", template_file= "email_osc.txt",  context = i).format_msg()
-#     # print(msg)
+	
+#     msg = Sender( subject="Test OSC LOS", template_file= "email_osc.txt",  context = i).format_msg()
+#     print(msg)
 # 
 # for i in obj_lst_to_render:
 #     print("************")
