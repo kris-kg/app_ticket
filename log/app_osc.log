@@ -1,0 +1,78 @@
+09/06/2021 06:00:01 PM   INFO:***Start APP_OSC.***
+09/06/2021 06:00:02 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:1.249s]
+09/06/2021 06:00:03 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:0.946s]
+09/06/2021 06:00:03 PM   INFO:OSC LOS with MUT LOS alarms nr: 2
+09/06/2021 06:00:03 PM   INFO:After removing duplicate sections: 1
+09/06/2021 06:00:03 PM   INFO:After removing reported alarms, to the report: 0
+09/06/2021 06:00:03 PM   INFO:After removing reported alarms(check alarm deatil), to the report: 0
+09/06/2021 06:00:03 PM   INFO:***End APP_OSC.***
+Find 5 results
+Find 17 results
+OSC LOS with MUT LOS alarms nr: 2
+After removing duplicate sections: 1
+After removing reported alarms, to the report: 0
+09/06/2021 06:15:01 PM   INFO:***Start APP_OSC.***
+09/06/2021 06:15:02 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:0.829s]
+09/06/2021 06:15:02 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:0.022s]
+09/06/2021 06:15:02 PM   INFO:OSC LOS with MUT LOS alarms nr: 2
+09/06/2021 06:15:02 PM   INFO:After removing duplicate sections: 1
+09/06/2021 06:15:02 PM   INFO:After removing reported alarms, to the report: 0
+09/06/2021 06:15:02 PM   INFO:After removing reported alarms(check alarm deatil), to the report: 0
+09/06/2021 06:15:02 PM   INFO:***End APP_OSC.***
+Find 5 results
+Find 17 results
+OSC LOS with MUT LOS alarms nr: 2
+After removing duplicate sections: 1
+After removing reported alarms, to the report: 0
+09/06/2021 06:30:02 PM   INFO:***Start APP_OSC.***
+09/06/2021 06:30:03 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:1.008s]
+09/06/2021 06:30:03 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:0.133s]
+09/06/2021 06:30:03 PM   INFO:OSC LOS with MUT LOS alarms nr: 2
+09/06/2021 06:30:03 PM   INFO:After removing duplicate sections: 1
+09/06/2021 06:30:03 PM   INFO:After removing reported alarms, to the report: 0
+09/06/2021 06:30:03 PM   INFO:After removing reported alarms(check alarm deatil), to the report: 0
+09/06/2021 06:30:03 PM   INFO:***End APP_OSC.***
+Find 5 results
+Find 17 results
+OSC LOS with MUT LOS alarms nr: 2
+After removing duplicate sections: 1
+After removing reported alarms, to the report: 0
+09/06/2021 06:45:01 PM   INFO:***Start APP_OSC.***
+09/06/2021 06:45:03 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:1.398s]
+09/06/2021 06:45:04 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:1.126s]
+09/06/2021 06:45:04 PM   INFO:OSC LOS with MUT LOS alarms nr: 2
+09/06/2021 06:45:04 PM   INFO:After removing duplicate sections: 1
+09/06/2021 06:45:04 PM   INFO:After removing reported alarms, to the report: 0
+09/06/2021 06:45:04 PM   INFO:After removing reported alarms(check alarm deatil), to the report: 0
+09/06/2021 06:45:04 PM   INFO:***End APP_OSC.***
+Find 5 results
+Find 16 results
+OSC LOS with MUT LOS alarms nr: 2
+After removing duplicate sections: 1
+After removing reported alarms, to the report: 0
+09/06/2021 07:00:01 PM   INFO:***Start APP_OSC.***
+09/06/2021 07:00:02 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:0.794s]
+09/06/2021 07:00:04 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:2.461s]
+09/06/2021 07:00:04 PM   INFO:OSC LOS with MUT LOS alarms nr: 2
+09/06/2021 07:00:04 PM   INFO:After removing duplicate sections: 1
+09/06/2021 07:00:04 PM   INFO:After removing reported alarms, to the report: 0
+09/06/2021 07:00:04 PM   INFO:After removing reported alarms(check alarm deatil), to the report: 0
+09/06/2021 07:00:04 PM   INFO:***End APP_OSC.***
+Find 5 results
+Find 18 results
+OSC LOS with MUT LOS alarms nr: 2
+After removing duplicate sections: 1
+After removing reported alarms, to the report: 0
+09/06/2021 07:15:01 PM   INFO:***Start APP_OSC.***
+09/06/2021 07:15:02 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:1.602s]
+09/06/2021 07:15:03 PM   INFO:POST http://flowmaster.autofm-test.oss.centertel.pl:80/es01/alarms-pool/_search [status:200 request:0.570s]
+09/06/2021 07:15:03 PM   INFO:OSC LOS with MUT LOS alarms nr: 2
+09/06/2021 07:15:03 PM   INFO:After removing duplicate sections: 1
+09/06/2021 07:15:03 PM   INFO:After removing reported alarms, to the report: 0
+09/06/2021 07:15:03 PM   INFO:After removing reported alarms(check alarm deatil), to the report: 0
+09/06/2021 07:15:03 PM   INFO:***End APP_OSC.***
+Find 6 results
+Find 10 results
+OSC LOS with MUT LOS alarms nr: 2
+After removing duplicate sections: 1
+After removing reported alarms, to the report: 0

@@ -1,0 +1,36 @@
+
+
+Test OSC Alarm raport.
+
+Date of event reported :	{event_report_time}
+Reported by :	Automat
+
+Priority :	P1
+Type of alert :	With interference
+
+System:	HUAWEI
+
+NE Name:	{ne_name}
+
+Alarm source:	{alarm_source}
+
+Measurement activation 1end node:	{1end_node}
+
+Measurement activation 1end port:	{1end_port}
+
+Measurement activation 2end node:	{2end_node}
+
+Measurement activation 2end port:	{2end_port}
+
+WDM Section:	{wdm_section}
+
+OT:	{ot}
+
+GIS reference:	{gis}
+
+Emplazamiento:	{Emplazamiento}
+
+Name SEDRA:	{Name SEDRA}
+
+
+Automatically generated raport.
