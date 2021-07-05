@@ -29,7 +29,7 @@ class Token:
     endpoint  = "https://inside01.api.intraorange/oauth/v3/token"
     payload="grant_type=client_credentials"
     header = {
-        'Authorization': "Basic U0FEUGtmOVhDZlNWSUdOOVh2MDMwelBwZ3JFSHNDaEk6M1ppUmozdmZFWnV3WG5IVA==",
+        'Authorization': "#######",
         'Content-Type': 'application/x-www-form-urlencoded'
     }
 
