@@ -5,6 +5,7 @@ Test OSC Alarm raport.
 Date of event reported :	{event_report_time}
 Reported by :	Automat
 
+Ocean: {ocean_tt}
 Priority :	P1
 Type of alert :	With interference
 

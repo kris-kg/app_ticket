@@ -6,11 +6,9 @@ from .base_function import (
                         get_fiber_date,
                         find_OT,
                         find_GIS,
-                        query_source_port,
-                        query_sink_port,
-                        ot
 )
 
+ot = "https://giros.orange.es/Giros/giros.MenuNavegacion/previsualizarOT?id="
 
 class Alarm():
     alarm_id = None
@@ -20,6 +18,7 @@ class Alarm():
     alarm_object = None   
     alarm_source = None
     port_name = None
+  
    
       
     def __init__(self, result_query):
@@ -36,7 +35,7 @@ class Alarm():
         self.port_loca = result_query['_source']['nePort'] 
         self.ne_name = result_query['_source']['ne_name']
         self.alarm_object = result_query['_source']['object']
-        self.alarm_detail = result_query['_source']['detail']
+        self.alarm_detail = result_query['_source']['detail'].split('_')[-2]
         
     def __str__(self):
         return self.port_loca
@@ -77,7 +76,7 @@ class OscAlarm(Alarm):
     oa_port1 = None
     oa_port2 = None
     port_info = None
-     
+    tt = None
     
     def port_osc_oa(self):
         matches =  ["FIU", "DAS", "DAP"]
@@ -168,6 +167,7 @@ class OscAlarm(Alarm):
         dict = {
         "data_field": datetime.now().strftime("%H:%M %Y:%m:%d"),
         "alarm_id": self.alarm_id,
+        'ocean_tt': self.tt,
         "event_report_time": self.event_update_time,
         "Alarm port": self.set_port_name(),
         "ne_name": self.alarm_source_name(),
@@ -184,6 +184,35 @@ class OscAlarm(Alarm):
         "Name SEDRA": self.ne
             }
         return dict
+
+    @property 
+    def clean_section_wdm(self):
+        if self.section_wdm and 'SUPERLD' in self.section_wdm:
+            return self.section_wdm.split('_SUPER')[0]
+        else:
+            return self.section_wdm
+
+    # def render_ocean_tt(self):
+    #     tt_attributes = {
+            #         'externalId': 'AutoTN App', 
+#                     'criticity': 2, 
+#                     'priority': 1, 
+#                     'category': 'E',
+#                     'description: f"Corte del tramo.\nRelacion: {self.section_wdm}<br />Las alarmas:\
+# OSC_LOS en el puerto: {self.ne_name} / { self.port_loca}<br />OT: \
+# https://giros.orange.es/Giros/giros.MenuNavegacion/previsualizarOT?id={find_OT(self.section_wdm)}",
+#                     'resorce': self.ne_name,
+#                     'createStartDateTime': self.event_start_time.split('.')[0]+'Z',
+#                     'groupId': '548002'
+        # }
+    
+
+
+    def set_tt(self, tt):
+        self.tt = tt
+
+    def __repr__(self):
+        return self.alarm_id
         
 
 

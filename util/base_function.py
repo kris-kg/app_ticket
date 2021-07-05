@@ -1,20 +1,8 @@
 import os
 import re
 from datetime import datetime
-from .database import CursorFromConnectionFromPool
+from .database_hendler import query, getresult, execquery
 
-
-# db queries
-query_rec_alm = 'INSERT INTO "tickets_alarm" ("time_reported", "ticket_app", "ticket_id", "reported_to_tt", "es_alarm_id", "probableCause", "timestamp_NFM", \
-"event_start_time", "ne_name", "ne_port", "link", "ot", "remarks", "alarm_detail") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-query_check_alm = 'SELECT "es_alarm_id" FROM "tickets_alarm" WHERE "es_alarm_id" = %s'
-query_check_alm_detail = 'SELECT "alarm_detail" FROM "tickets_alarm" WHERE "alarm_detail" = %s'
-query_source_port = 'SELECT * FROM tx_wdm_hua_cable WHERE "Source_NE" =%s AND "Source_Port" LIKE %s'
-query_sink_port = 'SELECT * FROM tx_wdm_hua_cable WHERE "Sink_NE" =%s AND "Sink_Port" LIKE %s'
-query_ot = """SELECT id_trail, id_trail_proteccion, nodo_a, nodo_z, n_serie, señal FROM giros_trails_extendidos_light WHERE \
-            "nodo_a" =%s AND "nodo_z" =%s AND "n_serie" =%s AND "señal" = 'WDM'"""
-query_gis = 'SELECT "SERVICE", "TRAIL", "FROM_EQUIPMENT_NAME", "FROM_HUB", "TO_EQUIPMENT_NAME", "TO_HUB" FROM "GIS_NE_exp04_route" WHERE "TRAIL" LIKE  %s'      
-ot = "https://giros.orange.es/Giros/giros.MenuNavegacion/previsualizarOT?id="
 
 datetime.now().strftime("%Y/%m/%d %H:%M:%S")
 
@@ -28,117 +16,101 @@ def switch_ends_wdm(wdm_name):
     return new_name
 
 
-#dane = self.get_port_attribute(self.port_name) --> returns dict 
-def get_fiber_date(dane, q = query_source_port):
-    with CursorFromConnectionFromPool() as cr:
-        if q == query_source_port:
-            cr.execute(q, ( dane['ne'], f"%{dane['shelf']}%{dane['slot']}%{dane['card']}%-{dane['port']}%" ))
-            result = cr.fetchall()
-        if q == query_sink_port:
-            cr.execute(q, ( dane['ne'], f"%{dane['shelf']}%{dane['slot']}%{dane['card']}%-{dane['port']}%" )) 
-            result = cr.fetchall()  
-        if result:
-            # print(f"Result get_fiber_date {result}")
-            port_info = {"Name": result[0][0],
-                            "Source_NE": result[0][3],
-                            "Source_Port": result[0][4],
-                            "Sink_NE": result[0][5],
-                            "Sink_Port": result[0][6]
-                            }
-            return port_info
+def get_fiber_date(dane, q='source'):
+    """
+    qury table tx_wdm_hua_cable base on the dict builded from func get_port_attribute(port)
+    """
+    if q == 'source':
+        result = getresult(query['source_port'], ( dane['ne'], f"%{dane['shelf']}%{dane['slot']}%{dane['card']}%-{dane['port']}%" ))
+    if q == 'sink':
+        result = getresult(query['sink_port'], ( dane['ne'], f"%{dane['shelf']}%{dane['slot']}%{dane['card']}%-{dane['port']}%" ))
+    if result:
+        port_info = {"Name": result[0],
+                    "Source_NE": result[3],
+                    "Source_Port": result[4],
+                    "Sink_NE": result[5],
+                    "Sink_Port": result[6]
+                    }
+        return port_info
 
 
-# find ot base on section name/link
-def find_OT(section_name): 
+def find_OT(section_name):
+    """
+    find ot base on section name
+    """
     if section_name:
         temp_section = section_name.split("_")
         if len(temp_section) > 3:
-            with CursorFromConnectionFromPool() as cr:
-                cr.execute(query_ot,( temp_section[0], temp_section[1], temp_section[3]))
-                row_result = cr.fetchall()
-                if row_result:
-                    return row_result[0][0]
-                else:
-                    with CursorFromConnectionFromPool() as cr:
-                        cr.execute(query_ot,( temp_section[1], temp_section[0], temp_section[3]))
-                        row_result = cr.fetchall()
-                        if row_result:
-                            return row_result[0][0]
+            rows_result = getresult(query['ot'], ( temp_section[0], temp_section[1], temp_section[3]), allrows = True)
+            if rows_result:
+                return rows_result[0][0]
+            else:
+                rows_result = getresult(query['ot'], ( temp_section[1], temp_section[0], temp_section[3]), allrows = True)
+                if rows_result:
+                    return rows_result[0][0]
 
 
 def find_GIS(section_wdm): 
     if section_wdm:
         temp_section = "_".join(section_wdm.split('_',4)[:4])
-        with CursorFromConnectionFromPool() as cr:
-            cr.execute(query_gis,( f"%{temp_section}%",))
-            row_result = cr.fetchone()
-            if row_result:
-                return f"Trail: {row_result[1]}, Service: {row_result[0]}, From Equipment: {row_result[2]}, From Hub: {row_result[3]}, To Equipment: {row_result[4]}, To Hub: {row_result[5]}"
-            else:
-                switch_temp_section = self.switch_ends_wdm(temp_section)
-                if switch_temp_section:
-                    with CursorFromConnectionFromPool() as cr:
-                        cr.execute(query_gis,( f"%{switch_temp_section}%",))
-                        row_result = cr.fetchone()
-                        if row_result:
-                            return f"Trail: {row_result[1]}, Service: {row_result[0]}, From Equipment: {row_result[2]}, From Hub: {row_result[3]}, To Equipment: {row_result[4]}, To Hub: {row_result[5]}"
+        row_result = getresult(query['gis'], ( f"%{temp_section}%",))
+        if row_result:
+            return f"Trail: {row_result[1]}, Service: {row_result[0]}, From Equipment: {row_result[2]}, From Hub: {row_result[3]}, To Equipment: {row_result[4]}, To Hub: {row_result[5]}"
+        else:
+            switch_temp_section = self.switch_ends_wdm(temp_section)
+            if switch_temp_section:
+                row_result = getresult(query['gis'], ( f"%{switch_temp_section}%",))
+                if row_result:
+                    return f"Trail: {row_result[1]}, Service: {row_result[0]}, From Equipment: {row_result[2]}, From Hub: {row_result[3]}, To Equipment: {row_result[4]}, To Hub: {row_result[5]}"
+
 
 
 # check if alarm id exist in db(if repored)
+
 def check_is_reported(id):
-    with CursorFromConnectionFromPool() as cr:
-        cr.execute(query_check_alm, (id,))
-        rows = cr.fetchone()
-        if rows:
-            return True
+    #for obj use in arg (obj.alarm_id)
+    rows = getresult(query['check_alm'], (id,))
+    if rows:
+        return True
+
 
 def check_is_reported_by_alm_id(id):
-    with CursorFromConnectionFromPool() as cr:
-        cr.execute(query_check_alm_detail, (id,))
-        rows = cr.fetchone()
-        if rows:
-            return True
+  # for obj use in arg (obj.alarm_detail)
+    rows = getresult(query['check_alm_detail'], (id,))
+    if rows:
+        return True
 
-# check if alarm id exist in db(if repored) base on obj
-def check_is_reported(obj):
-    with CursorFromConnectionFromPool() as cr:
-        cr.execute(query_check_alm, (obj.alarm_id,))
-        rows = cr.fetchone()
-        if rows:
-            return True
-  
-def check_is_reported_by_alm_id(obj):
-    with CursorFromConnectionFromPool() as cr:
-        cr.execute(query_check_alm_detail, (obj.alarm_detail,))
-        rows = cr.fetchone()
-        if rows:
-            return True
+
+def check_is_planedwork():
+    rows = getresult(query['planed_work'], (datetime.now().strftime("%Y/%m/%d %H:%M:%S"),), allrows = True)
+    if rows:
+        return [i[0] for i in rows]
+
 
 # save reported alalrm to db base on list 
 def log_alarm_list(list):
     with CursorFromConnectionFromPool() as cr:
-        cr.execute(query_rec_alm, (*list))
+        cr.execute(quequery['rec_alm'], (*list))
 
 
 # save reported alalrm to db base on obj
 def log_alarm(obj):
-    with CursorFromConnectionFromPool() as cr:
-        cr.execute(query_rec_alm, (
-                                        datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
-                                        "app_osc",
-                                        "NULL",
-                                        "ND",
-                                        obj.alarm_id,
-                                        "OSC LOS",
-                                        obj.timestamp,
-                                        obj.event_start_time,
-                                        obj.ne_name,
-                                        obj.port_loca,
-                                        obj.wdm_section_name(),
-                                        find_OT(obj.wdm_section_name()),
-                                        "NULL",
-                                        obj.alarm_detail.split('_')[-2]
-                                    ))
+    execquery(query['record_alms'], (
+                                datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
+                                "app_osc",
+                                obj.tt,
+                                "Ocean",
+                                obj.alarm_id,
+                                "OSC LOS",
+                                obj.timestamp,
+                                obj.event_start_time,
+                                obj.ne_name,
+                                obj.port_loca,
+                                obj.wdm_section_name(),
+                                find_OT(obj.wdm_section_name()),
+                                "NULL",
+                                obj.alarm_detail
+                            ))
 
 
 # remove osc if not mut obj list, base on shelf
@@ -167,3 +139,59 @@ def validate_rem_dupli_wdm(alarm_obj):
         else:
             pass
     return validate_alarm_obj
+
+
+
+# def find_tt(resource, criticity = 2, priority = 1, category = 'E', days = 5, group_created = '548002'):
+#     """
+#     Find tickets created by FO: 
+#     criticity = [2|3] (Interrupted service|No interference)
+#     priority = [1|2|3] (P1|P2|P3)
+#     category = [E|B] (Interrupted service|No interference)
+#     """
+#     Ticket_to_find = Ticket(
+#                     criticity = criticity, 
+#                     priority = priority, 
+#                     category = category,
+#                     filterStartDateTime = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+#                     groupId = group_created
+#     )
+#     finded_tt = Ocean_Api.search_ticket(Ticket_to_find.dict_from_class())
+#     if finded_tt:
+#         return [i['id'] for i in finded_tt if resource in i['description']]
+
+
+# def create_tt(**kwargs):
+#     """
+#     Create ticket base on: 
+#     criticity = [2|3] (Interrupted service|No interference)
+#     priority = [1|2|3] (P1|P2|P3)
+#     category = [E|B] (Interrupted service|No interference)
+#     resorce = resorce in Marina DB
+#     createStartDateTime = in fomrat '2021-07-02T10:50:22Z'
+#     """
+#     Ticket_to_create = Ticket(
+#                     externalId =  kwargs.get('externalId', 'AutoTN App'), 
+#                     criticity = kwargs.get('criticity'),
+#                     priority = kwargs.get('priority'),
+#                     category = kwargs.get('category'),
+#                     description =  kwargs.get('description'),
+#                     resorce =  kwargs.get('resorce'),
+#                     createStartDateTime = kwargs.get('createStartDateTime'),
+#                     groupId = kwargs.get('groupId', '548002'),
+#     ) 
+#     created_tt = Ocean_Api.create_ticket(Ticket_to_create.dict_from_class())
+#     # print(Ticket_to_create.dict_from_class())
+#     if created_tt:
+#         return created_tt['id']
+
+
+# def add_comment(ticket, comment):
+#     commented_tt =  Ocean_Api.add_comment_to_ticket(ticket, comment)
+#     if commented_tt:
+#         return commented_tt['id']
+
+# def activate_group(ticket, dest_group_id='548003'):
+#     activated_tt = Ocean_Api.activate_gr_for_ticket(ticket, dest_gr_id=dest_group_id)
+#     if activated_tt:
+#         return activated_tt
